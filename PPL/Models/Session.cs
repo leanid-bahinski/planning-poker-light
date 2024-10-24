@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PPL.Models;
 
-public partial class Session
+public sealed partial class Session
 {
-    public int SessionId { get; set; }
+    public int SessionId { get; init; }
 
-    public string? Name { get; set; }
+    [MaxLength(128)]
+    public string? Name { get; init; }
 
-    public DateTime? StartDate { get; set; }
+    public DateTime? StartDate { get; init; }
 
-    public string? Description { get; set; }
+    [MaxLength(1024)]
+    public string? Description { get; init; }
 
-    public virtual ICollection<SessionUser> SessionUsers { get; set; } = new List<SessionUser>();
+    public ICollection<SessionUser> SessionUsers { get; init; } = new List<SessionUser>();
 }

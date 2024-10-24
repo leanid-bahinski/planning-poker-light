@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ServiceLinker/locations/westus/connectors/ppldatabaseconnection_4E3F6FF1C5",
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/planning-poker-light/databases/ppl-database",
+      "type": "mssql.azure",
+      "connectionId": "ppl-database-connection"
+    },
+    "secrets1": {
+      "secretStore": null,
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/ppl-key",
+      "type": "secrets.keyVault",
+      "connectionId": "AZURE_VAULT_URI"
+    }
+  }
+}

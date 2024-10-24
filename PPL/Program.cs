@@ -1,11 +1,13 @@
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using PPL.Models;
 
 namespace PPL
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -19,8 +21,13 @@ namespace PPL
             });
 
             // Connect to Azure Key Vault
-            var secretClient = new SecretClient(new Uri("https://ppl-key.vault.azure.net/"), new DefaultAzureCredential());
+            var keyVaultUri = new Uri(builder.Configuration["AZURE_VAULT_URI"]!);
+            var secretClient = new SecretClient(keyVaultUri, new DefaultAzureCredential());
             builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+
+            // Add database context
+            var connectionString = builder.Configuration.GetValue<string>("ppl-database-connection");
+            builder.Services.AddDbContext<PplDatabaseContext>(options => options.UseSqlServer(connectionString));
 
             var app = builder.Build();
 

@@ -1,34 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace PPL.Models;
 
 public partial class PplDatabaseContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-
-    public PplDatabaseContext(IConfiguration configuration)
+    public PplDatabaseContext()
     {
-        _configuration = configuration;
+
     }
 
-    public PplDatabaseContext(DbContextOptions<PplDatabaseContext> options, IConfiguration configuration)
+    public PplDatabaseContext(DbContextOptions<PplDatabaseContext> options)
         : base(options)
     {
-        _configuration = configuration;
+
     }
 
-    public virtual DbSet<Session>? Sessions { get; set; }
+    public virtual required DbSet<Session> Sessions { get; init; }
 
-    public virtual DbSet<SessionUser>? SessionUsers { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var connectionString = _configuration.GetConnectionString("connection-string");
-        optionsBuilder.UseSqlServer(connectionString);
-    }
+    public virtual required DbSet<SessionUser> SessionUsers { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
