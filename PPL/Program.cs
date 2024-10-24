@@ -3,7 +3,9 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using PPL.Interfaces;
 using PPL.Models;
+using PPL.Services;
 
 namespace PPL
 {
@@ -13,7 +15,10 @@ namespace PPL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
+            builder.Services.AddScoped<ISessionService, SessionService>();
+
+            // Add utilities to the container
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -31,7 +36,7 @@ namespace PPL
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

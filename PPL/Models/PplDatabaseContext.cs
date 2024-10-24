@@ -27,7 +27,7 @@ public partial class PplDatabaseContext : DbContext
 
             entity.ToTable("Session");
 
-            entity.Property(e => e.SessionId).ValueGeneratedNever();
+            entity.Property(e => e.SessionId).ValueGeneratedOnAdd();
             entity.Property(e => e.Description).HasMaxLength(1024);
             entity.Property(e => e.Name).HasMaxLength(128);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
@@ -39,7 +39,7 @@ public partial class PplDatabaseContext : DbContext
 
             entity.ToTable("SessionUser");
 
-            entity.Property(e => e.SessionUserId).ValueGeneratedNever();
+            entity.Property(e => e.SessionUserId).ValueGeneratedOnAdd();
             entity.Property(e => e.Name).HasMaxLength(128);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
             entity.Property(e => e.VoteDate).HasColumnType("datetime");

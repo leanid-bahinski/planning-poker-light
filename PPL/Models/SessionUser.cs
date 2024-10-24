@@ -4,6 +4,7 @@ namespace PPL.Models;
 
 public sealed partial class SessionUser
 {
+    [Key]
     public int SessionUserId { get; init; }
 
     public int? SessionId { get; init; }

@@ -1,31 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using PPL.Interfaces;
 using PPL.Models;
 
 namespace PPL.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SessionController(PplDatabaseContext context, ILogger<SessionController> logger)
+    public class SessionController(ISessionService sessionService, ILogger<SessionController> logger)
         : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Session>>> GetSessions()
         {
-            return await context.Sessions.ToListAsync();
+            return await sessionService.GetSessionsAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Session>> GetSession(int id)
         {
-            var session = await context.Sessions.FindAsync(id);
+            return await sessionService.GetSessionAsync(id);
+        }
 
-            if (session == null)
-            {
-                return NotFound();
-            }
-
-            return session;
+        [HttpPost]
+        public async Task<ActionResult<Session>> CreateSession(Session session)
+        {
+            await sessionService.CreateSessionAsync(session);
+            return CreatedAtAction(nameof(GetSession), new { id = session.SessionId }, session);
         }
 
         [HttpPut("{id}")]
@@ -36,54 +36,15 @@ namespace PPL.Controllers
                 return BadRequest();
             }
 
-            context.Entry(session).State = EntityState.Modified;
-
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SessionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await sessionService.UpdateSessionAsync(session);
             return NoContent();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Session>> CreateSession(Session session)
-        {
-            context.Sessions.Add(session);
-            await context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSession", new { id = session.SessionId }, session);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSession(int id)
         {
-            var session = await context.Sessions.FindAsync(id);
-            if (session == null)
-            {
-                return NotFound();
-            }
-
-            context.Sessions.Remove(session);
-            await context.SaveChangesAsync();
-
+            await sessionService.DeleteSessionAsync(id);
             return NoContent();
-        }
-
-        private bool SessionExists(int id)
-        {
-            return context.Sessions.Any(e => e.SessionId == id);
         }
     }
 }
