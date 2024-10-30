@@ -35,6 +35,9 @@ namespace PPL.Services
 
             if (session != null)
             {
+                var sessionUsers = context.SessionUsers.Where(x => x.SessionId == id);
+                context.SessionUsers.RemoveRange(sessionUsers);
+
                 context.Sessions.Remove(session);
                 await context.SaveChangesAsync();
             }

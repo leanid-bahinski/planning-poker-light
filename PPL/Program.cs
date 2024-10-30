@@ -17,6 +17,7 @@ namespace PPL
 
             // Add services to the container
             builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<ISessionUserService, SessionUserService>();
 
             // Add utilities to the container
             builder.Services.AddControllers();
